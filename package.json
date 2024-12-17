@@ -1,0 +1,27 @@
+{
+  "name": "follow-path",
+  "version": "1.0.0",
+  "description": "A VanillaJS library to animate elements over a path.",
+  "main": "src/index.mjs",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AshishAntil07/FollowPath.git"
+  },
+  "keywords": [
+    "javascript",
+    "vanilla-js",
+    "svg",
+    "web",
+    "front-end",
+    "ui"
+  ],
+  "author": "AshishAntil07",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/AshishAntil07/FollowPath/issues"
+  },
+  "homepage": "https://github.com/AshishAntil07/FollowPath#readme"
+}

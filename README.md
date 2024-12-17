@@ -16,7 +16,7 @@ You can install this package in two ways:
 - Install using npm(or your preferred package manager):
 
 ```bash
-npm i followpath
+npm i follow-path
 ```
 
 - Clone the repository to your local machine:
@@ -29,7 +29,7 @@ git clone https://github.com/AshishAntil07/FollowPath.git
 
 Here's a basic example to animate an element along a polyline path:
 
-```html
+```xml
   <svg xmlns="http://www.w3.org/2000/svg" height="700" width="1000">
     <polyline 
       points="198,264 200,259 202,256 ... 893,250"
@@ -41,9 +41,9 @@ Here's a basic example to animate an element along a polyline path:
 ```js
 new FollowPath(
   [document.querySelector('.element')],      // elements to animate through the path
+  [10000],                                   // duration(in ms) of one iteration, corresponding to the elements
   document.querySelector('polyline'),        // reference to the svg path/polyline element
-  [10000],                                   // durations of elements in order
   2,                                         // number of iterations
-  e => { console.log('done') }               // callback
+  () => { console.log('done') }               // callback
 ).animate();                                 // start the animation
 ```
