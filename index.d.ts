@@ -21,9 +21,10 @@ declare class FollowPath {
    *  element: HTMLElement[] | HTMLElement,
    *  duration: number[] | number,
    *  path: SVGPathElement | SVGPolylineElement,
-   *  rotate: boolean,
    *  iterations: number,
-   *  callback: function
+   *  rotate?: boolean,
+   *  callback?: function,
+   *  timeline?: FollowPathTimeline
    * } } config Configuration object
    * - `element`: Element | Array of elements to animate.
    * - `duration`: Duration of animation(in ms) for each element in order
@@ -38,8 +39,8 @@ declare class FollowPath {
       element: HTMLElement;
       duration: number;
       path: SVGPathElement | SVGPolylineElement;
+      iterations: number;
       rotate?: boolean;
-      iterations?: number;
       callback?: () => void;
       timeline?: FollowPathTimeline;
     }

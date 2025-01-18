@@ -39,11 +39,27 @@ Here's a basic example to animate an element along a polyline path:
 ```
 
 ```js
-new FollowPath(
-  [document.querySelector('.element')],      // elements to animate through the path
-  [10000],                                   // duration(in ms) of one iteration, corresponding to the elements
-  document.querySelector('polyline'),        // reference to the svg path/polyline element
-  2,                                         // number of iterations
-  () => { console.log('done') }               // callback
-).animate();                                 // start the animation
+const fp = new FollowPath(                        // creates an instance.
+  {
+    element: document.querySelector('.element'),  // element to animate.
+    duration: 10000,                              // duration of the animation.
+    path: document.querySelector('polyline'),     // path to follow.
+    iterations: 2.5,                              // iterations, number of times the element will animate over the path.
+    rotate: true,                                 // whether to rotate the element along the path. (optional, false by default)
+    callback(){                                   // callback function, called after all iterations are completed. (optional)
+      console.log('done')
+    },
+    timeline: {                                   // timeline callback object. (optional)
+      '0%'() { console.log('started') },
+      '25%'() { console.log('25% completed') },
+      '50%'() { console.log('half completed') },
+      '75%'() { console.log('75% completed') }
+    }
+  }
+);
+
+fp.animate();  // starts the animation
+setTimeout(() => {
+  fp.stop();   // stops the animation after 6 seconds.
+}, 6000)
 ```

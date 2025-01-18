@@ -25,10 +25,10 @@ class FollowPath {
    *  element: HTMLElement[] | HTMLElement,
    *  duration: number[] | number,
    *  path: SVGPathElement | SVGPolylineElement,
-   *  rotate: boolean,
    *  iterations: number,
-   *  callback: function,
-   *  timeline: {
+   *  rotate?: boolean,
+   *  callback?: function,
+   *  timeline?: {
    *    [key: string]: () => void
    *  }
    * } } config Configuration object
