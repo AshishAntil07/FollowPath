@@ -10,24 +10,22 @@ declare class FollowPath {
   fps: number | null;
   path: SVGPathElement | SVGPolylineElement;
   callback: () => void;
-
+  iterations: number;
 
   /**
    * Creates an instance.
    * 
-   * **Note: Animating multiple elements will be deprecated in future versions. Use multiple instances for multiple elements.**
-   * 
    * @param { {
-   *  element: HTMLElement[] | HTMLElement,
-   *  duration: number[] | number,
+   *  element: HTMLElement,
+   *  duration: number,
    *  path: SVGPathElement | SVGPolylineElement,
    *  iterations: number,
    *  rotate?: boolean,
    *  callback?: function,
    *  timeline?: FollowPathTimeline
    * } } config Configuration object
-   * - `element`: Element | Array of elements to animate.
-   * - `duration`: Duration of animation(in ms) for each element in order
+   * - `element`: Element to animate.
+   * - `duration`: Duration of animation(in ms)
    * - `path`: Path to follow
    * - `rotate`: Whether to rotate the elements along the path or not
    * - `iterations`: Number of times animation should be repeated, can be set to `Infinity` for infinite loops, but that would cause the callback to never be called. You can also set it to a floating point number to do partial iterations.
@@ -47,7 +45,7 @@ declare class FollowPath {
   );
 
   /**
-   * Animates the elements on the svg path in the given durations and calls the callback function after completion.
+   * Animates the element on the svg path in the given duration and calls the callback function after completion.
    * 
    * You can specify an optional `iterNumber` (iteration number), to skip some iterations, or pass it as a floating point number to start from between the path.
    * @param { number } iterNumber Current Iteration Number
