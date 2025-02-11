@@ -4,10 +4,13 @@ A JavaScript package to animate HTML elements along an SVG path with custom dura
 
 ## Features
 
-- Animate multiple elements along a given SVG path.
-- Specify custom durations for each element.
-- Set the number of iterations for the animation.
+- Animates an element along a given SVG path.
+- Specify custom durations for the animation.
+- Rational number of iterations for the animation.
 - Callback function support after the animation completes.
+- Timeline support during animation.
+- Keeps track of animation fps(frames per second), and iterations completed during animation.
+- Stop the animation when required.
 
 ## Installation
 
@@ -42,8 +45,8 @@ Here's a basic example to animate an element along a polyline path:
 const fp = new FollowPath(                        // creates an instance.
   {
     element: document.querySelector('.element'),  // element to animate.
-    duration: 10000,                              // duration of the animation.
-    path: document.querySelector('polyline'),     // path to follow.
+    duration: 10000,                              // duration of the animation(in ms).
+    path: document.querySelector('polyline'),     // path to follow(can be a polyline or path element).
     iterations: 2.5,                              // iterations, number of times the element will animate over the path.
     rotate: true,                                 // whether to rotate the element along the path. (optional, false by default)
     callback(){                                   // callback function, called after all iterations are completed. (optional)
@@ -54,12 +57,17 @@ const fp = new FollowPath(                        // creates an instance.
       '25%'() { console.log('25% completed') },
       '50%'() { console.log('half completed') },
       '75%'() { console.log('75% completed') }
-    }
+    } // timeline keys must be in percentages!
   }
 );
 
 fp.animate();  // starts the animation
 setTimeout(() => {
+  console.log(`fps: ${fp.fps}\niterations: ${fp.iterations}`);
   fp.stop();   // stops the animation after 6 seconds.
+  // Note: Stopping the animation by interruption doesn't call the callback.
 }, 6000)
 ```
+
+
+### Full docs will be out soon!

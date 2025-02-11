@@ -4,7 +4,7 @@ class FollowPath {
   #duration;
   #stopAll;
   #rotate;
-  #iterations;
+  #privateIterations;
 
   /**
    * Stores the key-value map of timeline
@@ -19,21 +19,19 @@ class FollowPath {
   /**
    * Creates an instance.
    * 
-   * **Note: Animating multiple elements will be deprecated in future versions. Use multiple instances for multiple elements.**
-   * 
    * @param { {
-   *  element: HTMLElement[] | HTMLElement,
-   *  duration: number[] | number,
+   *  element: HTMLElement,
+   *  duration: number,
    *  path: SVGPathElement | SVGPolylineElement,
    *  iterations: number,
    *  rotate?: boolean,
    *  callback?: function,
    *  timeline?: {
-   *    [key: string]: () => void
+   *    [key: `${number}%`]: () => void;
    *  }
    * } } config Configuration object
-   * - `element`: Element | Array of elements to animate.
-   * - `duration`: Duration of animation(in ms) for each element in order
+   * - `element`: Element to animate.
+   * - `duration`: Duration of animation(in ms)
    * - `path`: Path to follow
    * - `rotate`: Whether to rotate the elements along the path or not
    * - `iterations`: Number of times animation should be repeated, can be set to `Infinity` for infinite loops, but that would cause the callback to never be called. You can also set it to a floating point number to do partial iterations.
@@ -47,7 +45,8 @@ class FollowPath {
     this.#element = element;
     this.#duration = duration;
     this.path = path;
-    this.#iterations = iterations;
+    this.#privateIterations = iterations;
+    this.iterations = iterations;
     this.callback = callback;
     this.#rotate = rotate || false;
     this.#timeline = timeline;
@@ -70,7 +69,7 @@ class FollowPath {
     let prevTime = null;
 
     const totalLength = this.path.getTotalLength();
-    if ((this.#iterations <= 0 || iterNumber > this.#iterations) && this.callback) {
+    if ((this.#privateIterations <= 0 || iterNumber > this.#privateIterations) && this.callback) {
       this.fps = null;
       this.callback();
       return;
@@ -83,7 +82,7 @@ class FollowPath {
 
     const animator = () => {
       // stop the animation if interrupted, or target iterations reached.
-      if (this.#stopAll || iterNumber >= this.#iterations) {
+      if (this.#stopAll || iterNumber >= this.#privateIterations) {
         this.fps = null;
         if (this.#stopAll) console.log('Animation Stopped by Interruption');
         else if (this.callback) this.callback();
@@ -92,7 +91,7 @@ class FollowPath {
 
       // iteration completed
       if (currentPoint >= totalLength) {
-        if (iterNumber <= this.#iterations) requestAnimationFrame(() => this.animate(iterNumber))
+        if (iterNumber <= this.#privateIterations) requestAnimationFrame(() => this.animate(iterNumber))
           return;
       }
       
@@ -105,7 +104,7 @@ class FollowPath {
 
       // call timeline callback if present
       if(this.#timeline && this.#timelineSorted){
-        while((iterNumber/this.#iterations)*100 >= this.#timelineSorted[this.#timelineSorted.length-1]) {
+        while((iterNumber/this.#privateIterations)*100 >= this.#timelineSorted[this.#timelineSorted.length-1]) {
           this.#timeline[this.#timelineSorted.pop()+'%']();
         }
       }
@@ -125,6 +124,7 @@ class FollowPath {
       this.#element.style.transform = `translate(${point.x}px, ${point.y}px)${this.#rotate ? ` rotate(${angle}deg)` : ''}`;
       currentPoint += pixelsPerMs;
       iterNumber += pixelsPerMs / totalLength;
+      this.iterations = iterNumber;
       
       prevTime = Date.now();
       requestAnimationFrame(animator);
