@@ -47,9 +47,10 @@ Here's a basic example to animate an element along a polyline path:
 const fp = new FollowPath(                        // creates an instance.
   {
     element: document.querySelector('.element'),  // element to animate.
-    duration: 10000,                              // duration of the animation(in ms).
+    duration: 10000,                              // duration per iteration(in ms).
     path: document.querySelector('polyline'),     // path to follow(can be a polyline or path element).
-    iterations: 2.5,                              // iterations, number of times the element will animate over the path.
+    delay: 2000,                                  // delay between each iteration(in ms).
+    iterations: 1.33,                             // iterations, number of times the element will animate over the path.
     rotate: true,                                 // whether to rotate the element along the path. (optional, false by default)
     callback(){                                   // callback function, called after all iterations are completed. (optional)
       console.log('done')
@@ -64,6 +65,13 @@ const fp = new FollowPath(                        // creates an instance.
 );
 
 fp.animate();  // starts the animation
+
+setTimeout(() => {
+  fp.pause();
+  setTimeout(() =>
+    fp.play()
+  , 1000)
+}, 1000);
 setTimeout(() => {
   console.log(`fps: ${fp.fps}\niterations: ${fp.iterations}`);
   fp.stop();   // stops the animation after 6 seconds.

@@ -158,7 +158,8 @@ class FollowPath {
    * Continues the animation.
    */
   play(){
-    this.animate(this.#privateIterations);
+    this.#stopAll = false;
+    this.animate(this.iterations);
   }
 
   /**
@@ -173,7 +174,7 @@ class FollowPath {
    */
   stop() {
     this.#stopAll = true;
-    this.#privateIterations = 0;
+    this.iterations = 0;
   }
 
   #validateConfig(config) {
@@ -193,7 +194,5 @@ class FollowPath {
     return true;
   }
 }
-
-window.FollowPath = FollowPath;
 
 export default FollowPath;
