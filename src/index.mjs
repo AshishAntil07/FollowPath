@@ -195,4 +195,6 @@ class FollowPath {
   }
 }
 
+window.FollowPath = FollowPath;
+
 export default FollowPath;
