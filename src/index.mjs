@@ -24,6 +24,8 @@ class FollowPath {
    *  duration: number,
    *  path: SVGPathElement | SVGPolylineElement,
    *  iterations: number,
+   *  delay?: number,
+   *  toScale?: boolean,
    *  rotate?: boolean,
    *  callback?: function,
    *  timeline?: {
@@ -33,6 +35,8 @@ class FollowPath {
    * - `element`: Element to animate.
    * - `duration`: Duration of animation(in ms)
    * - `path`: Path to follow
+   * - `delay`: Delay between each iteration(in ms)
+   * - `toScale`: Whether to match the animation to the current scale of the path. False by default.
    * - `rotate`: Whether to rotate the elements along the path or not
    * - `iterations`: Number of times animation should be repeated, can be set to `Infinity` for infinite loops, but that would cause the callback to never be called. You can also set it to a floating point number to do partial iterations.
    * - `callback`: Callback function to be called after animation
@@ -40,7 +44,13 @@ class FollowPath {
    */
 
   constructor(config) {
-    const { element, duration, path, iterations, callback, rotate, timeline } = config;
+
+    if (!this.#validateConfig(config)) throw Error("Invalid Config.");
+
+    const { element, duration, path, iterations, callback, rotate, timeline, toScale, delay } = config;
+
+    const bbox = path.getBBox();
+    const rect = path.getBoundingClientRect();
 
     this.#element = element;
     this.#duration = duration;
@@ -48,9 +58,17 @@ class FollowPath {
     this.#privateIterations = iterations;
     this.iterations = iterations;
     this.callback = callback;
+
+    this.delay = delay;
+
+    this.scale = toScale ? {
+      x: rect.width / bbox.width,
+      y: rect.height / bbox.height
+    } : { x: 1, y: 1 };
+
     this.#rotate = rotate || false;
     this.#timeline = timeline;
-    this.#timelineSorted = timeline?Object.keys(timeline).map(e => Number(e.slice(0, e.length-1))).sort((a, b) => b - a):null;
+    this.#timelineSorted = timeline ? Object.keys(timeline).map(e => Number(e.slice(0, e.length - 1))).sort((a, b) => b - a) : null;
     this.#stopAll = false;
   }
 
@@ -84,17 +102,19 @@ class FollowPath {
       // stop the animation if interrupted, or target iterations reached.
       if (this.#stopAll || iterNumber >= this.#privateIterations) {
         this.fps = null;
-        if (this.#stopAll) console.log('Animation Stopped by Interruption');
-        else if (this.callback) this.callback();
+        if (!this.#stopAll && this.callback) this.callback();
         return;
       };
 
       // iteration completed
       if (currentPoint >= totalLength) {
-        if (iterNumber <= this.#privateIterations) requestAnimationFrame(() => this.animate(iterNumber))
-          return;
+        if (iterNumber <= this.#privateIterations) setTimeout(e =>
+          requestAnimationFrame(() => this.animate(iterNumber)),
+          this.delay
+        );
+        return;
       }
-      
+
       // calculate speed and fps.
       if (prevTime) {
         const timePerFrame = Date.now() - prevTime;
@@ -103,29 +123,29 @@ class FollowPath {
       }
 
       // call timeline callback if present
-      if(this.#timeline && this.#timelineSorted){
-        while((iterNumber/this.#privateIterations)*100 >= this.#timelineSorted[this.#timelineSorted.length-1]) {
-          this.#timeline[this.#timelineSorted.pop()+'%']();
+      if (this.#timeline && this.#timelineSorted) {
+        while ((iterNumber / this.#privateIterations) * 100 >= this.#timelineSorted[this.#timelineSorted.length - 1]) {
+          this.#timeline[this.#timelineSorted.pop() + '%']();
         }
       }
-      
+
       // calculating next step
       let point = this.path.getPointAtLength(currentPoint);
       let nextPoint = this.path.getPointAtLength(currentPoint + 1);
       let angle = 0;
-      
+
       if (!(nextPoint.x === this.path.getPointAtLength(totalLength).x && nextPoint.y === this.path.getPointAtLength(totalLength).y)) {
         angle = Math.atan2(nextPoint.y - point.y, nextPoint.x - point.x) * 180 / Math.PI;
       } else {
         let prevPoint = this.path.getPointAtLength(currentPoint - 1);
         angle = Math.atan2(point.y - prevPoint.y, point.x - prevPoint.x) * 180 / Math.PI;
       }
-      
-      this.#element.style.transform = `translate(${point.x}px, ${point.y}px)${this.#rotate ? ` rotate(${angle}deg)` : ''}`;
+
+      this.#element.style.transform = `translate(${point.x * this.scale.x}px, ${point.y * this.scale.y}px)${this.#rotate ? ` rotate(${angle}deg)` : ''}`;
       currentPoint += pixelsPerMs;
       iterNumber += pixelsPerMs / totalLength;
       this.iterations = iterNumber;
-      
+
       prevTime = Date.now();
       requestAnimationFrame(animator);
     }
@@ -135,11 +155,45 @@ class FollowPath {
   }
 
   /**
+   * Continues the animation.
+   */
+  play(){
+    this.animate(this.#privateIterations);
+  }
+
+  /**
+   * Pauses the animation.
+   */
+  pause(){
+    this.#stopAll = true;
+  }
+
+  /**
    * Stops the animation
    */
   stop() {
     this.#stopAll = true;
+    this.#privateIterations = 0;
+  }
+
+  #validateConfig(config) {
+    if (!config || typeof config !== 'object' || Array.isArray(config)) return false;
+
+    const { duration, path, element, iterations } = config;
+
+    if (
+      typeof duration !== "number"
+      || Number.isNaN(duration)
+      || !path
+      || !element
+      || typeof iterations !== "number"
+      || Number.isNaN(iterations)
+    ) return false;
+
+    return true;
   }
 }
+
+window.FollowPath = FollowPath;
 
 export default FollowPath;
