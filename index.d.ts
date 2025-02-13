@@ -11,6 +11,11 @@ declare class FollowPath {
   path: SVGPathElement | SVGPolylineElement;
   callback: () => void;
   iterations: number;
+  delay: number;
+  scale: {
+    x: number;
+    y: number;
+  };
 
   /**
    * Creates an instance.
@@ -20,6 +25,8 @@ declare class FollowPath {
    *  duration: number,
    *  path: SVGPathElement | SVGPolylineElement,
    *  iterations: number,
+   *  delay?: number,
+   *  toScale?: boolean,
    *  rotate?: boolean,
    *  callback?: function,
    *  timeline?: FollowPathTimeline
@@ -27,6 +34,8 @@ declare class FollowPath {
    * - `element`: Element to animate.
    * - `duration`: Duration of animation(in ms)
    * - `path`: Path to follow
+   * - `delay`: Delay between each iteration(in ms)
+   * - `toScale`: Whether to match the animation to the current scale of the path. False by default.
    * - `rotate`: Whether to rotate the elements along the path or not
    * - `iterations`: Number of times animation should be repeated, can be set to `Infinity` for infinite loops, but that would cause the callback to never be called. You can also set it to a floating point number to do partial iterations.
    * - `callback`: Callback function to be called after animation
@@ -38,6 +47,7 @@ declare class FollowPath {
       duration: number;
       path: SVGPathElement | SVGPolylineElement;
       iterations: number;
+      toScale?: boolean;
       rotate?: boolean;
       callback?: () => void;
       timeline?: FollowPathTimeline;
@@ -51,6 +61,16 @@ declare class FollowPath {
    * @param { number } iterNumber Current Iteration Number
    */
   animate(iterNumber?: number): void;
+
+  /**
+   * Continues the animation.
+   */
+  play(): void;
+
+  /**
+   * Pauses the animation.
+   */
+  pause(): void;
 
   /**
    * Stops the animation.
