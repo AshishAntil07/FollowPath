@@ -108,10 +108,10 @@ class FollowPath {
 
       // iteration completed
       if (currentPoint >= totalLength) {
-        if (iterNumber <= this.#privateIterations) setTimeout(e =>
+        if (iterNumber <= this.#privateIterations) this.delay ? setTimeout(e =>
           requestAnimationFrame(() => this.animate(iterNumber)),
           this.delay
-        );
+        ) : requestAnimationFrame(() => this.animate(iterNumber));
         return;
       }
 
