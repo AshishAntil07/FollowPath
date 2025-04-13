@@ -1,6 +1,6 @@
 {
   "name": "follow-path",
-  "version": "1.2.1",
+  "version": "2.0.0",
   "description": "A VanillaJS library to animate elements over a path.",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
