@@ -44,40 +44,44 @@ Here's a basic example to animate an element along a polyline path:
 ```
 
 ```js
-const fp = new FollowPath(                        // creates an instance.
-  {
-    element: document.querySelector('.element'),  // element to animate.
-    duration: 10000,                              // duration per iteration(in ms).
-    path: document.querySelector('polyline'),     // path to follow(can be a polyline or path element).
-    delay: 2000,                                  // delay between each iteration(in ms).
-    iterations: 1.33,                             // iterations, number of times the element will animate over the path.
-    rotate: true,                                 // whether to rotate the element along the path. (optional, false by default)
-    callback(){                                   // callback function, called after all iterations are completed. (optional)
-      console.log('done')
-    },
-    timeline: {                                   // timeline callback object. (optional)
-      '0%'() { console.log('started') },
-      '25%'() { console.log('25% completed') },
-      '50%'() { console.log('half completed') },
-      '75%'() { console.log('75% completed') }
-    } // timeline keys must be in percentages!
-  }
-);
+const fp = new FollowPath({                         // creates an instance.
+  element: document.querySelector('.element'),      // element to animate.
+  duration: 3000,                                   // duration per iteration (in ms).
+  path: document.querySelector('polyline'),         // path to follow (can be a polyline or path element).
+  iterations: 2.5,                                  // number of times the element will animate over the path.
+  rotate: true,                                     // whether to rotate the element along the path. (optional, false by default)
 
-fp.animate();  // starts the animation
+  easing(t) {                                       // easing function to control animation pacing. (optional)
+    // easeInOutCubic example
+    return t < 0.5
+      ? 4 * t * t * t
+      : 1 - Math.pow(-2 * t + 2, 3) / 2;
+  },
+
+  callback() {                                      // callback function, called after all iterations are completed. (optional)
+    console.log('done');
+  },
+
+  timeline: {                                       // timeline callback object. (optional)
+    '0%'() { console.log('started') },
+    '25%'() { console.log('25% completed') },
+    '50%'() { console.log('half completed') },
+    '75%'() { console.log('75% completed') }
+  } // timeline keys must be in percentages!
+});
+
+fp.animate();                                       // starts the animation
 
 setTimeout(() => {
-  fp.pause();
-  setTimeout(() =>
-    fp.play()
-  , 1000)
+  fp.pause();                                       // pauses the animation after 1s
+  setTimeout(() => fp.play(), 1000);                // resumes animation after another second
 }, 1000);
+
 setTimeout(() => {
   console.log(`fps: ${fp.fps}\niterations: ${fp.iterations}`);
-  fp.stop();   // stops the animation after 6 seconds.
+  fp.stop();                                        // stops the animation after 6 seconds.
   // Note: Stopping the animation by interruption doesn't call the callback.
-}, 6000)
+}, 6000);
 ```
 
-
-### Full docs will be out soon!
+### Full docs will be out soon

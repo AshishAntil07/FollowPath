@@ -1,3 +1,22 @@
+
+type TimelineKey = `${number}%`;
+
+interface FollowPathConfig {
+  element: HTMLElement;
+  duration: number;
+  path: SVGPathElement | SVGPolylineElement;
+  iterations: number;
+  delay?: number;
+  toScale?: boolean;
+  rotate?: boolean;
+  callback?: () => void;
+  timeline?: {
+    [key: TimelineKey]: () => void;
+  };
+  easing?: (t: number) => number;
+  mode?: 'pingpong' | 'loop' | 'clamp' | ((t: number) => number);
+}
+
 class FollowPath {
 
   #element;
@@ -9,9 +28,9 @@ class FollowPath {
   #exceedEasing;
 
   #exceedEasingModes = {
-    'clamp': (_) => { 1 },
-    'loop': (t) => t % 1,
-    'pingpong': (t) => 1 - (t % 1)
+    'clamp': (_: number) => 1,
+    'loop': (t: number) => t > 1 ? t % 1 : 1 - (t % 1),
+    'pingpong': (t: number) => t > 1 ? 1 - (t % 1) : -(t % 1)
   };
 
   /**
@@ -24,24 +43,19 @@ class FollowPath {
    */
   #timelineSorted;
 
+  // public properties
+  path;
+  iterations;
+  callback;
+  delay;
+  easing;
+  scale;
+  fps?: number;
+
   /**
    * Creates an instance.
    * 
-   * @param { {
-   *  element: HTMLElement,
-   *  duration: number,
-   *  path: SVGPathElement | SVGPolylineElement,
-   *  iterations: number,
-   *  delay?: number,
-   *  toScale?: boolean,
-   *  rotate?: boolean,
-   *  callback?: function,
-   *  timeline?: {
-   *    [key: `${number}%`]: () => void;
-   *  },
-   *  easing?: (t: number) => number,
-   *  mode?: 'pingpong' | 'loop' | 'clamp' | ((t: number) => number)
-   * } } config Configuration object
+   * @param config Configuration object
    * - `element`: Element to animate.
    * - `duration`: Duration of animation(in ms)
    * - `path`: Path to follow
@@ -60,7 +74,7 @@ class FollowPath {
    *     Default is `'clamp'
    */
 
-  constructor(config) {
+  constructor(config: FollowPathConfig) {
 
     if (!this.#validateConfig(config)) throw Error("Invalid Config.");
 
@@ -78,7 +92,7 @@ class FollowPath {
 
     this.delay = delay;
     this.easing = easing || ((t) => t);
-    this.#exceedEasing = typeof mode === 'function' ? mode : this.#exceedEasingModes[mode] || this.#exceedEasingModes['clamp'];
+    this.#exceedEasing = typeof mode === 'function' ? mode : mode && Object.keys(this.#exceedEasingModes).includes(mode) ? this.#exceedEasingModes[mode] : this.#exceedEasingModes['clamp'];
 
     this.scale = toScale ? {
       x: rect.width / bbox.width,
@@ -96,26 +110,27 @@ class FollowPath {
    * 
    * You can specify an optional `iterNumber` (iteration number), to skip some iterations, or pass it as a floating point number to start from between the path.
    * @param { { iterNumber?: number, singleFrame?: boolean } } param0 
-   * - `iterNumber` - Iteration number, 0 by default.
-   * - `singleFrame` - Whether to render a single frame, or the whole animation.
+   *  - `iterNumber` - Iteration number, 0 by default.
+   *  - `singleFrame` - Whether to render a single frame, or the whole animation.
    */
-  animate({ iterNumber, singleFrame }) {
+  animate({ iterNumber, singleFrame }: { iterNumber?: number; singleFrame?: boolean; }) {
     if (!this.path || !this.#element || !this.#duration) {
       throw Error(`Runtime Error (FollowPath): ${!this.path ? 'Path' : !this.#element ? 'Element' : !this.#duration ? 'Duration' : ''} not specified.`);
     }
 
+    if (!iterNumber) iterNumber = 0;
 
-    this.fps = null;
-    let prevTime = null;
+    this.fps = undefined;
+    let prevTime: number | null = null;
 
     const totalLength = this.path.getTotalLength();
     if ((this.#privateIterations <= 0 || iterNumber > this.#privateIterations) && this.callback) {
-      this.fps = null;
+      this.fps = undefined;
       this.callback();
       return;
     }
 
-    function ease(length) {
+    const ease = (length: number) => {
       const easedLength = totalLength * this.easing(length / totalLength);
 
       return easedLength > totalLength || easedLength < 0 ? this.#exceedEasing(easedLength) : easedLength
@@ -133,17 +148,17 @@ class FollowPath {
 
       // stop the animation if interrupted, or target iterations reached.
       if (this.#stopAll || iterNumber >= this.#privateIterations) {
-        this.fps = null;
+        this.fps = undefined;
         if (!this.#stopAll && this.callback) this.callback();
         return;
       };
 
       // iteration completed
       if (currentLength >= totalLength) {
-        if (iterNumber <= this.#privateIterations) this.delay ? setTimeout(e =>
-          requestAnimationFrame(() => this.animate(iterNumber)),
+        if (iterNumber <= this.#privateIterations) this.delay ? setTimeout(() =>
+          requestAnimationFrame(() => this.animate({ iterNumber })),
           this.delay
-        ) : requestAnimationFrame(() => this.animate(iterNumber));
+        ) : requestAnimationFrame(() => this.animate({ iterNumber }));
         return;
       }
 
@@ -157,7 +172,8 @@ class FollowPath {
       // call timeline callback if present
       if (this.#timeline && this.#timelineSorted) {
         while ((iterNumber / this.#privateIterations) * 100 >= this.#timelineSorted[this.#timelineSorted.length - 1]) {
-          this.#timeline[this.#timelineSorted.pop() + '%']();
+          const timelineNumber = this.#timelineSorted.pop();
+          if (timelineNumber) this.#timeline[`${timelineNumber}%`]();
         }
       }
 
@@ -191,7 +207,7 @@ class FollowPath {
    * Renders a specific frame, if not specified, renders a next frame.
    * @param {number} frameNumber The frame to render. (60 fps)
    */
-  renderFrame(frameNumber) {
+  renderFrame(frameNumber?: number) {
     this.animate({ singleFrame: true, iterNumber: frameNumber ? frameNumber / ((this.#duration / 50) * 3) : this.iterations });
   }
 
@@ -200,7 +216,7 @@ class FollowPath {
    */
   play() {
     this.#stopAll = false;
-    this.animate(this.iterations);
+    this.animate({ iterNumber: this.iterations });
   }
 
   /**
@@ -230,7 +246,7 @@ class FollowPath {
    * Sets the progress of the animation.
    * @param {number} percentage Current Progress in percentage.
    */
-  setProgress(percentage) {
+  setProgress(percentage: number) {
     this.iterations = (percentage * this.#privateIterations) / 100
   }
 
@@ -247,11 +263,11 @@ class FollowPath {
    * Sets the progress of current iteration.
    * @param {number} percentage Current Progress in percentage.
    */
-  setCurrentIterationProgress(percentage) {
+  setCurrentIterationProgress(percentage: number) {
     this.iterations = (Math.floor(this.iterations) + percentage / 100)
   }
 
-  #validateConfig(config) {
+  #validateConfig(config: FollowPathConfig) {
     if (!config || typeof config !== 'object' || Array.isArray(config)) return false;
 
     const {
@@ -266,7 +282,7 @@ class FollowPath {
       !element ||
       typeof iterations !== "number" || Number.isNaN(iterations) ||
       (typeof easing !== 'function') ||
-      (!Object.keys(this.#exceedEasingModes).includes(mode) && typeof mode !== 'function')
+      mode && (typeof mode !== 'function' && !Object.keys(this.#exceedEasingModes).includes(mode))
     ) return false;
 
     if (delay !== undefined && (typeof delay !== "number" || Number.isNaN(delay))) return false;
@@ -278,14 +294,12 @@ class FollowPath {
       if (typeof timeline !== "object" || Array.isArray(timeline)) return false;
       for (const key in timeline) {
         if (!/^(\d{1,3})%$/.test(key)) return false;
-        if (typeof timeline[key] !== "function") return false;
+        if (typeof timeline[key as TimelineKey] !== "function") return false;
       }
     }
 
     return true;
   }
 }
-
-window.FollowPath = FollowPath;
 
 export default FollowPath;
