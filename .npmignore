@@ -1,6 +1,7 @@
 /demo
 src/
 *.ts
+!index.d.ts
 *.config.js
 node_modules/
 *.map
