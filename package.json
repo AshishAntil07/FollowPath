@@ -2,10 +2,11 @@
   "name": "follow-path",
   "version": "1.2.1",
   "description": "A VanillaJS library to animate elements over a path.",
-  "main": "src/index.mjs",
-  "types": "index.d.ts",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "tsc && terser dist/index.js -o dist/index.js --compress --mangle && echo \"Built Successfully!\""
   },
   "repository": {
     "type": "git",
@@ -24,5 +25,9 @@
   "bugs": {
     "url": "https://github.com/AshishAntil07/FollowPath/issues"
   },
-  "homepage": "https://github.com/AshishAntil07/FollowPath#readme"
+  "homepage": "https://github.com/AshishAntil07/FollowPath#readme",
+  "devDependencies": {
+    "terser": "^5.39.0",
+    "typescript": "^5.8.3"
+  }
 }

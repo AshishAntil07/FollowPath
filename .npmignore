@@ -1,0 +1,8 @@
+/demo
+src/
+*.ts
+*.config.js
+node_modules/
+*.map
+tsconfig.json
+package-lock.json
