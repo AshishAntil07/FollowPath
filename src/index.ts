@@ -21,6 +21,7 @@ class FollowPath {
 
   #element;
   #duration;
+  #totalDuration;
   #stopAll;
   #rotate;
   #privateIterations;
@@ -84,7 +85,8 @@ class FollowPath {
     const rect = path.getBoundingClientRect();
 
     this.#element = element;
-    this.#duration = duration;
+    this.#duration = duration/iterations;
+    this.#totalDuration = duration;
     this.path = path;
     this.#privateIterations = iterations;
     this.iterations = iterations;
@@ -109,11 +111,18 @@ class FollowPath {
    * Animates the elements on the svg path in the given durations and calls the callback function after completion.
    * 
    * You can specify an optional `iterNumber` (iteration number), to skip some iterations, or pass it as a floating point number to start from between the path.
-   * @param { { iterNumber?: number, singleFrame?: boolean } } param0 
+   * @param { { iterNumber?: number, singleFrame?: boolean } } options 
    *  - `iterNumber` - Iteration number, 0 by default.
    *  - `singleFrame` - Whether to render a single frame, or the whole animation.
    */
-  animate({ iterNumber, singleFrame }: { iterNumber?: number; singleFrame?: boolean; }) {
+  animate(options: { iterNumber?: number; singleFrame?: boolean; }) {
+    let iterNumber: number | undefined, singleFrame: boolean | undefined;
+
+    if(options) {
+      iterNumber = options.iterNumber;
+      singleFrame = options.singleFrame;
+    }
+
     if (!this.path || !this.#element || !this.#duration) {
       throw Error(`Runtime Error (FollowPath): ${!this.path ? 'Path' : !this.#element ? 'Element' : !this.#duration ? 'Duration' : ''} not specified.`);
     }
@@ -208,7 +217,7 @@ class FollowPath {
    * @param {number} frameNumber The frame to render. (60 fps)
    */
   renderFrame(frameNumber?: number) {
-    this.animate({ singleFrame: true, iterNumber: frameNumber ? frameNumber / ((this.#duration / 50) * 3) : this.iterations });
+    this.animate({ singleFrame: true, iterNumber: frameNumber ? frameNumber / ((this.#totalDuration / 50) * 3) : this.iterations });
   }
 
   /**

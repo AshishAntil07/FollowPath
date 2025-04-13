@@ -52,11 +52,11 @@ declare class FollowPath {
      * Animates the elements on the svg path in the given durations and calls the callback function after completion.
      *
      * You can specify an optional `iterNumber` (iteration number), to skip some iterations, or pass it as a floating point number to start from between the path.
-     * @param { { iterNumber?: number, singleFrame?: boolean } } param0
+     * @param { { iterNumber?: number, singleFrame?: boolean } } options
      *  - `iterNumber` - Iteration number, 0 by default.
      *  - `singleFrame` - Whether to render a single frame, or the whole animation.
      */
-    animate({ iterNumber, singleFrame }: {
+    animate(options: {
         iterNumber?: number;
         singleFrame?: boolean;
     }): void;
