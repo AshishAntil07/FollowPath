@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    
+    <meta name="theme-color" content="#000000" />
+    <meta
+    name="description"
+      content="Documentation for the FollowPath library — animate HTML elements along SVG paths."
+      />
+    
+    <meta property="og:title" content="FollowPath Docs">
+<meta property="og:description" content="Documentation for the FollowPath library — animate HTML elements along SVG paths.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="FollowPath Docs">
+    <title>FollowPath Docs</title>
+    <link rel="stylesheet" href="assets/index-g8TvF1yT.css" />
+             <script type="module" src="assets/index-f4lWyyYB.js"></script>
+    
+    <style>
+      @keyframes keep-rotating {
+        from {
+          transform: translate(-50%, -50%) rotate(0deg);
+        }
+        to {
+          transform: translate(-50%, -50%) rotate(360deg);
+        }
+      }
+
+      body.loading {
+        overflow: hidden;
+
+        &::before {
+          content: '';
+          position: fixed;
+          inset: 0;
+          z-index: 50;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          background-color: rgba(255, 255, 255, 0.8);
+          backdrop-filter: blur(4px);
+        }
+
+        &::after {
+          content: '';
+          position: fixed;
+          width: 4rem;
+          height: 4rem;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+          z-index: 51;
+          border: 4px solid #3498db;
+          border-top-color: transparent;
+          border-radius: 50%;
+          animation: keep-rotating 1s linear infinite;
+        }
+      }
+    </style>
+  </head>
+  <body class='loading'>
+    <div id="app">__smm_static_temp_content__</div>
+    
+  </body>
+</html>

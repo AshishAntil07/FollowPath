@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    
+    <meta name="theme-color" content="#000000" />
+    <meta
+    name="description"
+      content="Documentation for the FollowPath library — animate HTML elements along SVG paths."
+      />
+    
+    <meta property="og:title" content="FollowPath Docs">
+<meta property="og:description" content="Documentation for the FollowPath library — animate HTML elements along SVG paths.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="FollowPath Docs">
+    <title>FollowPath Docs</title>
+    <link rel="stylesheet" href="assets/index-g8TvF1yT.css" />
+             <script type="module" src="assets/index-f4lWyyYB.js"></script>
+    
+    <style>
+      @keyframes keep-rotating {
+        from {
+          transform: translate(-50%, -50%) rotate(0deg);
+        }
+        to {
+          transform: translate(-50%, -50%) rotate(360deg);
+        }
+      }
+
+      body.loading {
+        overflow: hidden;
+
+        &::before {
+          content: '';
+          position: fixed;
+          inset: 0;
+          z-index: 50;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          background-color: rgba(255, 255, 255, 0.8);
+          backdrop-filter: blur(4px);
+        }
+
+        &::after {
+          content: '';
+          position: fixed;
+          width: 4rem;
+          height: 4rem;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+          z-index: 51;
+          border: 4px solid #3498db;
+          border-top-color: transparent;
+          border-radius: 50%;
+          animation: keep-rotating 1s linear infinite;
+        }
+      }
+    </style>
+  </head>
+  <body class='loading'>
+    <div id="app">__smm_static_temp_content__<h1>Methods</h1>
+<h2><code>animate(options?)</code></h2>
+<p>Starts the animation. Can be called with optional parameters:</p>
+<pre class="language-typescript"><code class="language-typescript"><span class="token function">animate</span><span class="token punctuation">(</span>options<span class="token operator">?</span><span class="token operator">:</span> <span class="token punctuation">{</span> iterNumber<span class="token operator">?</span><span class="token operator">:</span> <span class="token builtin">number</span><span class="token punctuation">;</span> singleFrame<span class="token operator">?</span><span class="token operator">:</span> <span class="token builtin">boolean</span> <span class="token punctuation">}</span><span class="token punctuation">)</span>
+</code></pre>
+<ul>
+<li><code>iterNumber</code> — start from a specific iteration (float for partial position, default <code>0</code>)</li>
+<li><code>singleFrame</code> — render only one frame instead of the full animation</li>
+</ul>
+<h2><code>play()</code></h2>
+<p>Resumes a paused animation from its current position.</p>
+<h2><code>pause()</code></h2>
+<p>Pauses the animation at the current frame. Call <code>.play()</code> to resume.</p>
+<h2><code>stop()</code></h2>
+<p>Stops the animation and resets progress to <code>0</code>. The <code>callback</code> is <strong>not</strong> called when stopped via interruption.</p>
+<h2><code>renderFrame(frameNumber?)</code></h2>
+<p>Renders a specific frame. If no argument is given, renders the next frame based on current progress.</p>
+<pre class="language-typescript"><code class="language-typescript"><span class="token function">renderFrame</span><span class="token punctuation">(</span>frameNumber<span class="token operator">?</span><span class="token operator">:</span> <span class="token builtin">number</span><span class="token punctuation">)</span>
+</code></pre>
+<h2><code>getProgress()</code></h2>
+<p>Returns the total progress as a percentage of all iterations.</p>
+<pre class="language-typescript"><code class="language-typescript"><span class="token function">getProgress</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">:</span> <span class="token builtin">number</span>
+</code></pre>
+<h2><code>setProgress(percentage)</code></h2>
+<p>Sets the total progress to a specific percentage.</p>
+<pre class="language-typescript"><code class="language-typescript"><span class="token function">setProgress</span><span class="token punctuation">(</span>percentage<span class="token operator">:</span> <span class="token builtin">number</span><span class="token punctuation">)</span><span class="token operator">:</span> <span class="token keyword">void</span>
+</code></pre>
+<h2><code>getCurrentIterationProgress()</code></h2>
+<p>Returns the progress of the current iteration only (a whole iteration = 100%).</p>
+<pre class="language-typescript"><code class="language-typescript"><span class="token function">getCurrentIterationProgress</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">:</span> <span class="token builtin">number</span>
+</code></pre>
+<h2><code>setCurrentIterationProgress(percentage)</code></h2>
+<p>Sets the progress of the current iteration without affecting the iteration count.</p>
+<pre class="language-typescript"><code class="language-typescript"><span class="token function">setCurrentIterationProgress</span><span class="token punctuation">(</span>percentage<span class="token operator">:</span> <span class="token builtin">number</span><span class="token punctuation">)</span><span class="token operator">:</span> <span class="token keyword">void</span>
+</code></pre>
+</div>
+    
+  </body>
+</html>

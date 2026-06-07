@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    
+    <meta name="theme-color" content="#000000" />
+    <meta
+    name="description"
+      content="Documentation for the FollowPath library — animate HTML elements along SVG paths."
+      />
+    
+    <meta property="og:title" content="FollowPath Docs">
+<meta property="og:description" content="Documentation for the FollowPath library — animate HTML elements along SVG paths.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="FollowPath Docs">
+    <title>FollowPath Docs</title>
+    <link rel="stylesheet" href="assets/index-g8TvF1yT.css" />
+             <script type="module" src="assets/index-f4lWyyYB.js"></script>
+    
+    <style>
+      @keyframes keep-rotating {
+        from {
+          transform: translate(-50%, -50%) rotate(0deg);
+        }
+        to {
+          transform: translate(-50%, -50%) rotate(360deg);
+        }
+      }
+
+      body.loading {
+        overflow: hidden;
+
+        &::before {
+          content: '';
+          position: fixed;
+          inset: 0;
+          z-index: 50;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          background-color: rgba(255, 255, 255, 0.8);
+          backdrop-filter: blur(4px);
+        }
+
+        &::after {
+          content: '';
+          position: fixed;
+          width: 4rem;
+          height: 4rem;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+          z-index: 51;
+          border: 4px solid #3498db;
+          border-top-color: transparent;
+          border-radius: 50%;
+          animation: keep-rotating 1s linear infinite;
+        }
+      }
+    </style>
+  </head>
+  <body class='loading'>
+    <div id="app">__smm_static_temp_content__<h1>FollowPath</h1>
+<p>A <strong>VanillaJS</strong> library to animate HTML elements along an SVG path with custom durations, iterations, easing, and lifecycle callbacks.</p>
+<h2>Features</h2>
+<ul>
+<li>Animate elements along any SVG <code>&lt;path&gt;</code> or <code>&lt;polyline&gt;</code></li>
+<li>Custom duration and rational iteration count (including <code>Infinity</code>)</li>
+<li>Configurable delay between iterations</li>
+<li>Path scale compensation (<code>toScale</code>)</li>
+<li>Rotation along the path tangent (<code>rotate</code>)</li>
+<li>Easing functions for custom pacing</li>
+<li>Timeline callbacks at arbitrary percentage points</li>
+<li>Animation modes: <code>clamp</code>, <code>loop</code>, <code>pingpong</code>, or custom</li>
+<li>Play / Pause / Stop controls</li>
+<li>Real-time FPS and iteration tracking</li>
+<li>Frame-accurate rendering with <code>renderFrame</code></li>
+<li>Progress getters and setters</li>
+</ul>
+<p>Check out the <a href="/demo">live demo</a>.</p>
+<h2>Installation</h2>
+<pre class="language-bash"><code class="language-bash"><span class="token function">npm</span> i follow-path
+</code></pre>
+<p>Or clone from <a href="https://github.com/AshishAntil07/FollowPath.git">GitHub</a>.</p>
+<hr />
+<ul>
+<li><a href="/getting-started">Getting Started</a></li>
+<li><a href="/usage">Usage</a></li>
+<li><a href="/constructor-config">Constructor Config</a></li>
+<li><a href="/methods">Methods</a></li>
+<li><a href="/properties">Properties</a></li>
+<li><a href="/modes">Modes</a></li>
+<li><a href="/basic-animation">Basic Animation</a></li>
+<li><a href="/timeline-and-easing">Timeline and Easing</a></li>
+</ul>
+</div>
+    
+  </body>
+</html>

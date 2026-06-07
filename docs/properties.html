@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    
+    <meta name="theme-color" content="#000000" />
+    <meta
+    name="description"
+      content="Documentation for the FollowPath library — animate HTML elements along SVG paths."
+      />
+    
+    <meta property="og:title" content="FollowPath Docs">
+<meta property="og:description" content="Documentation for the FollowPath library — animate HTML elements along SVG paths.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="FollowPath Docs">
+    <title>FollowPath Docs</title>
+    <link rel="stylesheet" href="assets/index-g8TvF1yT.css" />
+             <script type="module" src="assets/index-f4lWyyYB.js"></script>
+    
+    <style>
+      @keyframes keep-rotating {
+        from {
+          transform: translate(-50%, -50%) rotate(0deg);
+        }
+        to {
+          transform: translate(-50%, -50%) rotate(360deg);
+        }
+      }
+
+      body.loading {
+        overflow: hidden;
+
+        &::before {
+          content: '';
+          position: fixed;
+          inset: 0;
+          z-index: 50;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          background-color: rgba(255, 255, 255, 0.8);
+          backdrop-filter: blur(4px);
+        }
+
+        &::after {
+          content: '';
+          position: fixed;
+          width: 4rem;
+          height: 4rem;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+          z-index: 51;
+          border: 4px solid #3498db;
+          border-top-color: transparent;
+          border-radius: 50%;
+          animation: keep-rotating 1s linear infinite;
+        }
+      }
+    </style>
+  </head>
+  <body class='loading'>
+    <div id="app">__smm_static_temp_content__<h1>Properties</h1>
+<h2>Public properties</h2>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>path</code></td>
+<td><code>SVGPathElement | SVGPolylineElement</code></td>
+<td>The SVG path being animated</td>
+</tr>
+<tr>
+<td><code>iterations</code></td>
+<td><code>number</code></td>
+<td>Current iteration count (readable / writable)</td>
+</tr>
+<tr>
+<td><code>callback</code></td>
+<td><code>(() =&gt; void) | undefined</code></td>
+<td>Completion callback</td>
+</tr>
+<tr>
+<td><code>delay</code></td>
+<td><code>number | undefined</code></td>
+<td>Delay between iterations (ms)</td>
+</tr>
+<tr>
+<td><code>easing</code></td>
+<td><code>(t: number) =&gt; number</code></td>
+<td>Current easing function</td>
+</tr>
+<tr>
+<td><code>scale</code></td>
+<td><code>{ x: number; y: number }</code></td>
+<td>Active scale compensation factors</td>
+</tr>
+<tr>
+<td><code>fps</code></td>
+<td><code>number | undefined</code></td>
+<td>Measured frames per second (updates each frame)</td>
+</tr>
+</tbody>
+</table>
+</div>
+    
+  </body>
+</html>

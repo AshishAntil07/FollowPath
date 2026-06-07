@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    
+    <meta name="theme-color" content="#000000" />
+    <meta
+    name="description"
+      content="Documentation for the FollowPath library — animate HTML elements along SVG paths."
+      />
+    
+    <meta property="og:title" content="FollowPath Docs">
+<meta property="og:description" content="Documentation for the FollowPath library — animate HTML elements along SVG paths.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="FollowPath Docs">
+    <title>FollowPath Docs</title>
+    <link rel="stylesheet" href="assets/index-g8TvF1yT.css" />
+             <script type="module" src="assets/index-f4lWyyYB.js"></script>
+    
+    <style>
+      @keyframes keep-rotating {
+        from {
+          transform: translate(-50%, -50%) rotate(0deg);
+        }
+        to {
+          transform: translate(-50%, -50%) rotate(360deg);
+        }
+      }
+
+      body.loading {
+        overflow: hidden;
+
+        &::before {
+          content: '';
+          position: fixed;
+          inset: 0;
+          z-index: 50;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          background-color: rgba(255, 255, 255, 0.8);
+          backdrop-filter: blur(4px);
+        }
+
+        &::after {
+          content: '';
+          position: fixed;
+          width: 4rem;
+          height: 4rem;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+          z-index: 51;
+          border: 4px solid #3498db;
+          border-top-color: transparent;
+          border-radius: 50%;
+          animation: keep-rotating 1s linear infinite;
+        }
+      }
+    </style>
+  </head>
+  <body class='loading'>
+    <div id="app">__smm_static_temp_content__<h1>Constructor Config</h1>
+<p>The <code>FollowPath</code> constructor accepts a single configuration object with the following properties:</p>
+<h2>Required</h2>
+<h3><code>element</code></h3>
+<p>Type: <code>HTMLElement</code></p>
+<p>The DOM element to animate along the path.</p>
+<h3><code>duration</code></h3>
+<p>Type: <code>number</code> (ms)</p>
+<p>Total duration of the animation across all iterations.</p>
+<h3><code>path</code></h3>
+<p>Type: <code>SVGPathElement | SVGPolylineElement</code></p>
+<p>The SVG path or polyline element defining the trajectory.</p>
+<h3><code>iterations</code></h3>
+<p>Type: <code>number</code></p>
+<p>Number of times the element traverses the path. Can be a floating point for partial traversal, or <code>Infinity</code> for infinite looping (callback will never fire).</p>
+<h2>Optional</h2>
+<h3><code>delay</code></h3>
+<p>Type: <code>number</code> (ms)</p>
+<p>Delay between each iteration before the next one starts.</p>
+<h3><code>toScale</code></h3>
+<p>Type: <code>boolean</code></p>
+<p>When <code>true</code>, compensates for differences between the SVG's internal coordinate system and the rendered bounding box, keeping the animation aligned with the visual path.</p>
+<h3><code>rotate</code></h3>
+<p>Type: <code>boolean</code></p>
+<p>When <code>true</code>, the element is automatically rotated to follow the path's tangent direction.</p>
+<h3><code>callback</code></h3>
+<p>Type: <code>() =&gt; void</code></p>
+<p>Function called once after all iterations complete. Not called if animation is stopped via <code>.stop()</code> or interrupted.</p>
+<h3><code>easing</code></h3>
+<p>Type: <code>(t: number) =&gt; number</code></p>
+<p>A function that maps progress <code>t</code> (0 to 1) to a eased value. Defaults to linear <code>(t) =&gt; t</code>.</p>
+<pre class="language-js"><code class="language-js"><span class="token function">easing</span><span class="token punctuation">(</span><span class="token parameter">t</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token keyword">return</span> t <span class="token operator">*</span> t<span class="token punctuation">;</span> <span class="token comment">// ease-in</span>
+<span class="token punctuation">}</span>
+</code></pre>
+<h3><code>timeline</code></h3>
+<p>Type: <code>{ [key: </code>${number}%<code>]: () =&gt; void }</code></p>
+<p>An object whose keys are percentage strings (e.g. <code>'50%'</code>) and values are callbacks fired when the animation reaches that point.</p>
+<h3><code>mode</code></h3>
+<p>Type: <code>'pingpong' | 'loop' | 'clamp' | ((t: number) =&gt; number)</code></p>
+<p>Defines behavior when the animation exceeds the path length:</p>
+<ul>
+<li><code>'clamp'</code> — holds at the end position (default)</li>
+<li><code>'loop'</code> — wraps around to the start</li>
+<li><code>'pingpong'</code> — reverses direction each iteration</li>
+<li>Custom function — maps exceeded progress values manually</li>
+</ul>
+</div>
+    
+  </body>
+</html>
