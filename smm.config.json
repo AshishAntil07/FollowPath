@@ -1,0 +1,14 @@
+{
+  "rootTitle": "FollowPath Docs",
+  "description": "Documentation for the FollowPath library — animate HTML elements along SVG paths.",
+  "defaultTheme": "dark",
+  "sortRoutes": true,
+  "trimIndexFromPath": true,
+  "publicPath": "public",
+  "og": {
+    "title": "FollowPath Docs",
+    "description": "Documentation for the FollowPath library — animate HTML elements along SVG paths.",
+    "type": "website",
+    "site_name": "FollowPath Docs"
+  }
+}
