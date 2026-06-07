@@ -8,7 +8,7 @@
   <title></title>
   <meta name="description" content="">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <script src='../dist/index.js' type='module'></script>
+  <script src='./demo/index.js' type='module'></script>
   <style>
     * {
       margin: 0;
@@ -27,6 +27,16 @@
       top: -25px;
       left: -25px;
     }
+
+    .logs {
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 100vh;
+      width: 100vw;
+      opacity: 50%;
+      color: black;
+    }
   </style>
 </head>
 
@@ -42,13 +52,20 @@
     </polyline>
   </svg>
   <div class='element'>&rarr;</div>
+  <div class="logs"></div>
 
   <script>
 
     document.addEventListener('DOMContentLoaded', () => {
+      const logsElem = document.querySelector(".logs");
+      function log(str) {
+        logsElem.innerHTML += str;
+        logsElem.appendChild(document.createElement("br"));
+      }
+
       const fp = new FollowPath({                         // creates an instance.
         element: document.querySelector('.element'),      // element to animate.
-        duration: 3000,                                   // duration per iteration (in ms).
+        duration: 9000,                                   // duration per iteration (in ms).
         path: document.querySelector('polyline'),         // path to follow (can be a polyline or path element).
         iterations: 2.5,                                  // number of times the element will animate over the path.
         rotate: true,                                     // whether to rotate the element along the path. (optional, false by default)
@@ -72,16 +89,23 @@
         } // timeline keys must be in percentages!
       });
 
+      log("started animation");
       fp.animate();                                       // starts the animation
 
       setTimeout(() => {
         fp.pause();                                       // pauses the animation after 1s
-        setTimeout(() => fp.play(), 1000);                // resumes animation after another second
+        log("paused for 1 second");
+        setTimeout(() => {
+          fp.play();
+          log("resumed");
+        }, 1000);                // resumes animation after another second
       }, 1000);
 
       setTimeout(() => {
         console.log(`fps: ${fp.fps}\niterations: ${fp.iterations}`);
         fp.stop();                                        // stops the animation after 6 seconds.
+        log("stopping the animation after 8.5 second by force.");
+        log("logged fps and completed iterations at the instant in the console.");
         // Note: Stopping the animation by interruption doesn't call the callback.
       }, 8500);
 
